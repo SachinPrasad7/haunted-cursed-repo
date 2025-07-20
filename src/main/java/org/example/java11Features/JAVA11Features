@@ -1,0 +1,116 @@
+Java 11, released in September 2018, is a Long-Term Support (LTS) version and brought several new features, API enhancements, and performance improvements. Below are the key Java 11 features explained with simple examples:
+
+✅ 1. var in Lambda Parameters
+Java 11 allows using var in lambda parameter declarations.
+
+🔹 Example:
+
+List<String> names = List.of("John", "Jane");
+names.forEach((var name) -> System.out.println(name.toUpperCase()));
+Useful for adding annotations to parameters in lambdas.
+
+✅ 2. New String Methods
+Java 11 added several utility methods to the String class:
+
+🔹 isBlank() – Checks if the string is empty or contains only white space:
+
+System.out.println("   ".isBlank()); // true
+🔹 lines() – Converts a multi-line string into a stream of lines:
+
+String multiline = "Hello\nWorld";
+multiline.lines().forEach(System.out::println);
+🔹 strip(), stripLeading(), stripTrailing() – Unicode-aware trim:
+
+System.out.println("  Hello  ".strip());        // "Hello"
+System.out.println("  Hello  ".stripLeading()); // "Hello  "
+System.out.println("  Hello  ".stripTrailing());// "  Hello"
+🔹 repeat(int count) – Repeats the string:
+
+System.out.println("Hi ".repeat(3)); // Hi Hi Hi 
+✅ 3. Files.readString() and writeString() (java.nio.file)
+Simplifies reading/writing small text files.
+
+🔹 Example:
+
+Path path = Path.of("example.txt");
+Files.writeString(path, "Hello Java 11");
+
+String content = Files.readString(path);
+System.out.println(content); // Hello Java 11
+✅ 4. HttpClient API (Standardized)
+Modern HTTP client introduced in Java 9, finalized in Java 11.
+
+🔹 Example (Synchronous Request):
+
+HttpClient client = HttpClient.newHttpClient();
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://example.com"))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+🔹 Asynchronous Request:
+
+client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+      .thenApply(HttpResponse::body)
+      .thenAccept(System.out::println);
+✅ 5. Local-Variable Syntax for Lambda Parameters
+Allows annotations or use of var in lambda expressions.
+
+
+list.forEach((@Nonnull var item) -> System.out.println(item));
+✅ 6. Nest-Based Access Control
+Improves access between nested classes and outer class members, even private ones, without reflection.
+
+No syntax change, but better encapsulation and access control at bytecode level.
+
+✅ 7. Collection.toArray(IntFunction)
+New default method in Collection to convert collection to array without needing new Type[size].
+
+🔹 Example:
+
+List<String> list = List.of("a", "b", "c");
+String[] array = list.toArray(String[]::new);
+System.out.println(Arrays.toString(array)); // [a, b, c]
+✅ 8. Running Java Files with java (No Compilation Needed)
+Java 11 lets you run .java files directly like a script.
+
+🔹 Command Line:
+bash
+
+java Hello.java
+🔹 Example Hello.java:
+
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello from Java 11!");
+    }
+}
+✅ 9. Removed/Deprecated Modules
+Java 11 removed several deprecated Java EE modules:
+
+java.xml.ws, java.xml.bind, java.activation
+
+java.corba, java.transaction, java.se.ee
+
+You’ll need to use external libraries if you relied on these.
+
+✅ 10. ZGC: Low Latency Garbage Collector (Experimental)
+Z Garbage Collector (ZGC) is a scalable low-latency GC, useful for large heaps.
+
+Use with JVM flags: -XX:+UseZGC
+(Still experimental in Java 11)
+
+📌 Summary Table:
+Feature	Description	Example Code / Command
+String.isBlank()	Checks if a string is blank	" ".isBlank() → true
+String.repeat(int)	Repeats a string	"ha".repeat(3) → haha
+Files.readString()	Reads file into string	Files.readString(path)
+HttpClient API	Send HTTP requests	client.send(request, handler)
+Lambda with var	Use var in lambdas	(var x) -> x * x
+Run Java file directly	No compilation needed	java Hello.java
+List.toArray() with method	Better array conversion	list.toArray(String[]::new)
+Nest-based Access Control	Better access between nested/outer classes	Internal JVM improvement
+Removed Java EE modules	Deprecated modules removed	JAXB, JAX-WS, CORBA
+ZGC (Experimental)	Low latency GC for large heaps	-XX:+UseZGC
+
